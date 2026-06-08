@@ -1,0 +1,70 @@
+services:
+  backend:
+    build: .
+    container_name: smart-parenting-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-claude}
+      - LLM_CLAUDE_API_KEY=${LLM_CLAUDE_API_KEY:-}
+      - LLM_OPENAI_API_KEY=${LLM_OPENAI_API_KEY:-}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://localhost:11434}
+      - SQLITE_PATH=/app/data/family_profiles.db
+      - CHROMA_PERSIST_DIR=/app/data/chroma_store
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-change-me-to-a-real-256-bit-key}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - backend_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    container_name: smart-parenting-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: smart-parenting-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    profiles:
+      - full
+      - ollama
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: smart-parenting-chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    restart: unless-stopped
+    profiles:
+      - full
+      - chroma
+
+volumes:
+  backend_data:
+  ollama_data:
+  chroma_data:

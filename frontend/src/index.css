@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .chat-bubble-user {
+    @apply bg-primary-50 border border-primary-200 rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%] self-end;
+  }
+  .chat-bubble-assistant {
+    @apply bg-gray-50 border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[80%] self-start;
+  }
+  .evidence-badge-rct {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800;
+  }
+  .evidence-badge-meta-analysis {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800;
+  }
+  .evidence-badge-guideline {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800;
+  }
+  .evidence-badge-observational {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800;
+  }
+  .evidence-badge-expert-opinion {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600;
+  }
+}
