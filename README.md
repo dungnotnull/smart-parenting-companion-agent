@@ -1,4 +1,4 @@
-# Smart Parenting Companion
+<h1 align="center">Smart Parenting Companion</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.11-blue?style=flat-square&logo=python" alt="Python 3.11" />
